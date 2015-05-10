@@ -4,7 +4,7 @@
 #
 #
 
-import math, os, pickle, re
+import math, os, pickle, re, copy
 
 class Bayes_Classifier:
 
@@ -13,7 +13,10 @@ class Bayes_Classifier:
       cache of a trained classifier has been stored, it loads this cache.  Otherwise, 
       the system will proceed through training.  After running this method, the classifier 
       is ready to classify input text."""
-   
+      self.positive = {}
+      self.negative = {}
+      self.positiveNum = 0
+      self.negativeNum = 0
       if os.path.isfile('store.pkl'):
          trainData = self.load('store.pkl')
          self.positive = trainData[0]
@@ -40,8 +43,8 @@ class Bayes_Classifier:
          if filename[0] == '.':
             continue
          rating = int(filename.split('-')[1])
-         reviewStr = bc.loadFile('movies_reviews/' + filename)
-         reviewWords = bc.tokenize(reviewStr)
+         reviewStr = self.loadFile('movies_reviews/' + filename)
+         reviewWords = self.tokenize(reviewStr)
          tempDic = {}
          for word in reviewWords:
             if not tempDic.has_key(word):
@@ -154,7 +157,7 @@ class Bayes_Classifier:
          positiveSet.add(item)
       for item in negative:
          negativeSet.add(item)
-      allSet = negativeSet + positiveSet
+      allSet = negativeSet | positiveSet
       for element in allSet:
          if not positive.has_key(element):
             positive[element] = 0
