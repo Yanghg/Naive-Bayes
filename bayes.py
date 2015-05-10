@@ -15,6 +15,8 @@ class Bayes_Classifier:
       is ready to classify input text."""
       self.positive = {}
       self.negative = {}
+      self.positiveNum = 0
+      self.negativeNum = 0
 
    def train(self):   
       """Trains the Naive Bayes Sentiment Classifier."""
@@ -47,6 +49,22 @@ class Bayes_Classifier:
       """Given a target string sText, this function returns the most likely document
       class to which the target string belongs (i.e., positive, negative or neutral).
       """
+      tokenList = self.tokenize(sText)
+      positive, negative = self.addOneSmoothing()
+      positiveProb = float(self.positiveNum)/(self.positiveNum+self.negativeNum);
+      negativeProb = float(self.negativeNum)/(self.positiveNum+self.negativeNum);
+      positiveSum = 0;
+      negativeSum = 0;
+      for token in tokenList:
+         if positive.has_key(token):
+            positiveSum += math.log(float(positive[token])/self.positiveNum,2)
+            negativeSum += math.log(float(negative[token])/self.negativeNum,2)
+      positiveSum = positiveSum * positiveProb
+      negativeSum = negativeSum * negativeProb
+      if positiveSum >= negativeSum:
+         return True
+      else:
+         return False
 
    def loadFile(self, sFilename):
       """Given a file name, return the contents of the file as a string."""
@@ -95,18 +113,23 @@ class Bayes_Classifier:
       return lTokens
 
    def addOneSmoothing(self):
-      positiveSet = set();
-      negativeSet = set();
-      allSet = set();
-      for item in self.positive:
+      positiveSet = set()
+      negativeSet = set()
+      positive = copy.deepcopy(self.positive)
+      negative = copy.deepcopy(self.negative)
+      allSet = set()
+      for item in positive:
          positiveSet.add(item)
-      for item in self.negative:
+      for item in negative:
          negativeSet.add(item)
-      allSet = negativeSet + positiveSet;
+      allSet = negativeSet + positiveSet
       for element in allSet:
-         if not self.positive.has_key(element):
-            self.positive[element] = 0
-         if not self.negative.has_key(element):
-            self.negative[element] = 0
-         self.positive[element] += 1
-         self.negative[element] += 1
+         if not positive.has_key(element):
+            positive[element] = 0
+         if not negative.has_key(element):
+            negative[element] = 0
+         positive[element] += 1
+         negative[element] += 1
+      return positive, negative
+
+
