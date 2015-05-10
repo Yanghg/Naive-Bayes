@@ -13,13 +13,12 @@ class Bayes_Classifier:
       cache of a trained classifier has been stored, it loads this cache.  Otherwise, 
       the system will proceed through training.  After running this method, the classifier 
       is ready to classify input text."""
-      #self.positive = {}
-      #self.negative = {}
+      self.positive = {}
+      self.negative = {}
 
    def train(self):   
       """Trains the Naive Bayes Sentiment Classifier."""
-      positive = {}
-      negative = {}
+
       lFileList = []
       rating = 0
       for fFileObj in os.walk('movies_reviews/'):
@@ -32,16 +31,16 @@ class Bayes_Classifier:
          reviewWords = bc.tokenize(reviewStr)
          if (rating == 5):
             for word in reviewWords:
-               if not positive.has_key(word):
-                  positive[word] = 0
-               positive[word] += 1
+               if not self.positive.has_key(word):
+                  self.positive[word] = 0
+               self.positive[word] += 1
          else:
             for word in reviewWords:
-               if not negative.has_key(word):
-                  negative[word] = 0
-               negative[word] += 1
+               if not self.negative.has_key(word):
+                  self.negative[word] = 0
+               self.negative[word] += 1
 
-         
+
 
     
    def classify(self, sText):
