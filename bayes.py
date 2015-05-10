@@ -93,3 +93,20 @@ class Bayes_Classifier:
          lTokens.append(sToken)
 
       return lTokens
+
+   def addOneSmoothing(self):
+      positiveSet = set();
+      negativeSet = set();
+      allSet = set();
+      for item in self.positive:
+         positiveSet.add(item)
+      for item in self.negative:
+         negativeSet.add(item)
+      allSet = negativeSet + positiveSet;
+      for element in allSet:
+         if not self.positive.has_key(element):
+            self.positive[element] = 0
+         if not self.negative.has_key(element):
+            self.negative[element] = 0
+         self.positive[element] += 1
+         self.negative[element] += 1
