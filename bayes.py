@@ -15,8 +15,6 @@ class Bayes_Classifier:
       is ready to classify input text."""
       self.positive = {}
       self.negative = {}
-      self.positiveNum = 0
-      self.negativeNum = 0
 
    def train(self):   
       """Trains the Naive Bayes Sentiment Classifier."""
@@ -51,10 +49,10 @@ class Bayes_Classifier:
       """
       tokenList = self.tokenize(sText)
       positive, negative = self.addOneSmoothing()
-      positiveProb = float(self.positiveNum)/(self.positiveNum+self.negativeNum);
-      negativeProb = float(self.negativeNum)/(self.positiveNum+self.negativeNum);
-      positiveSum = 0;
-      negativeSum = 0;
+      positiveProb = float(self.positiveNum)/(self.positiveNum+self.negativeNum)
+      negativeProb = float(self.negativeNum)/(self.positiveNum+self.negativeNum)
+      positiveSum = 0
+      negativeSum = 0
       for token in tokenList:
          if positive.has_key(token):
             positiveSum += math.log(float(positive[token])/self.positiveNum,2)
