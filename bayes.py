@@ -13,9 +13,36 @@ class Bayes_Classifier:
       cache of a trained classifier has been stored, it loads this cache.  Otherwise, 
       the system will proceed through training.  After running this method, the classifier 
       is ready to classify input text."""
+      #self.positive = {}
+      #self.negative = {}
 
    def train(self):   
       """Trains the Naive Bayes Sentiment Classifier."""
+      positive = {}
+      negative = {}
+      lFileList = []
+      rating = 0
+      for fFileObj in os.walk('movies_reviews/'):
+         lFileList = fFileObj[2]
+         break
+      #return lFileList
+      for filename in lFileList:
+         rating = int(filename.split('-')[1])
+         reviewStr = bc.loadFile('movies_reviews/' + filename)
+         reviewWords = bc.tokenize(reviewStr)
+         if (rating == 5):
+            for word in reviewWords:
+               if not positive.has_key(word):
+                  positive[word] = 0
+               positive[word] += 1
+         else:
+            for word in reviewWords:
+               if not negative.has_key(word):
+                  negative[word] = 0
+               negative[word] += 1
+
+         
+
     
    def classify(self, sText):
       """Given a target string sText, this function returns the most likely document
