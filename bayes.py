@@ -13,11 +13,20 @@ class Bayes_Classifier:
       cache of a trained classifier has been stored, it loads this cache.  Otherwise, 
       the system will proceed through training.  After running this method, the classifier 
       is ready to classify input text."""
-      self.positive = {}
-      self.negative = {}
+   
+      if os.path.isfile('store.pkl'):
+         trainData = self.load('store.pkl')
+         self.positive = trainData[0]
+         self.negative = trainData[1]
+         self.positiveNum = trainData[2]
+         self.negativeNum = trainData[3]
+
+      else:
+         self.train()
+
 
    def train(self):   
-       """Trains the Naive Bayes Sentiment Classifier."""
+      """Trains the Naive Bayes Sentiment Classifier."""
       positiveNum = 0
       negativeNum = 0
       trainData = []
@@ -49,6 +58,9 @@ class Bayes_Classifier:
                if not self.negative.has_key(key):
                   self.negative[key] = 0
                self.negative[key] += 1
+      self.positiveNum = positiveNum
+      self.negativeNum = negativeNum
+
       trainData.append(self.positive)
       trainData.append(self.negative)
       trainData.append(positiveNum)
