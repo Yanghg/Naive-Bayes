@@ -94,8 +94,9 @@ class Bayes_Classifier:
          if positive.has_key(token):
             positiveSum += math.log(float(positive[token])/self.positiveNum,2)
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
-      positiveSum = positiveSum * positiveProb
-      negativeSum = negativeSum * negativeProb
+      positiveSum = math.pow(2,positiveSum) * positiveProb
+      negativeSum = math.pow(2,negativeSum) * negativeProb
+      print positiveSum, negativeSum
       if positiveSum >= negativeSum:
          return True
       else:
