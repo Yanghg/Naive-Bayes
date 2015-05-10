@@ -17,8 +17,10 @@ class Bayes_Classifier:
       self.negative = {}
 
    def train(self):   
-      """Trains the Naive Bayes Sentiment Classifier."""
-
+       """Trains the Naive Bayes Sentiment Classifier."""
+      positiveNum = 0
+      negativeNum = 0
+      trainData = []
       lFileList = []
       rating = 0
       for fFileObj in os.walk('movies_reviews/'):
@@ -26,19 +28,39 @@ class Bayes_Classifier:
          break
       #return lFileList
       for filename in lFileList:
+         if filename[0] == '.':
+            continue
          rating = int(filename.split('-')[1])
          reviewStr = bc.loadFile('movies_reviews/' + filename)
          reviewWords = bc.tokenize(reviewStr)
+         tempDic = {}
+         for word in reviewWords:
+            if not tempDic.has_key(word):
+               tempDic[word] = True
          if (rating == 5):
-            for word in reviewWords:
-               if not self.positive.has_key(word):
-                  self.positive[word] = 0
-               self.positive[word] += 1
+            positiveNum += 1
+            for key in tempDic:
+               if not self.positive.has_key(key):
+                  self.positive[key] = 0
+               self.positive[key] += 1
          else:
-            for word in reviewWords:
-               if not self.negative.has_key(word):
-                  self.negative[word] = 0
-               self.negative[word] += 1
+            negativeNum += 1
+            for key in tempDic:
+               if not self.negative.has_key(key):
+                  self.negative[key] = 0
+               self.negative[key] += 1
+      trainData.append(self.positive)
+      trainData.append(self.negative)
+      trainData.append(positiveNum)
+      trainData.append(negativeNum)     
+      self.save(trainData,'store.pkl')
+      '''
+      dicP = self.load('store.pkl')
+      if dicP[0] == self.positive:
+         print True
+      if dicP[1] == self.negative:
+         print True
+      '''
 
 
 
