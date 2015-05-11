@@ -17,6 +17,7 @@ class Bayes_Classifier:
       self.negative = {}
       self.positiveNum = 0
       self.negativeNum = 0
+      
       if os.path.isfile('store.pkl'):
          trainData = self.load('store.pkl')
          self.positive = trainData[0]
@@ -26,6 +27,14 @@ class Bayes_Classifier:
 
       else:
          self.train()
+
+      print 'positive:'
+      for p in self.positive:
+         print p + ':' + str(self.positive[p])
+      print '\nnegative:'
+      for n in self.negative:
+         print n + ':' + str(self.negative[n])
+
 
 
    def train(self):   
