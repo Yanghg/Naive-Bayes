@@ -57,6 +57,7 @@ class Bayes_Classifier:
          reviewWords = self.tokenize(reviewStr)
          tempDic = {}
          for word in reviewWords:
+            word = word.lower()
             if not tempDic.has_key(word):
                tempDic[word] = True
          if (rating == 5):
@@ -100,14 +101,16 @@ class Bayes_Classifier:
       negativeProb = float(self.negativeNum)/(self.positiveNum+self.negativeNum)
       positiveSum = math.log(positiveProb,2)
       negativeSum = math.log(negativeProb,2)
+      difference = positiveSum - negativeSum
       for token in tokenList:
+         token = token.lower()
          if positive.has_key(token):
             positiveSum += math.log(float(positive[token])/self.positiveNum,2)
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
       #positiveSum = math.pow(2,positiveSum) * positiveProb
       #negativeSum = math.pow(2,negativeSum) * negativeProb
       print positiveSum, negativeSum
-      if positiveSum - negativeSum > 1 and positiveSum - negativeSum < 4:
+      if positiveSum - negativeSum > difference - 1.6 and positiveSum - negativeSum < difference + 1.6:
          return 'Neutral'
       elif positiveSum > negativeSum:
          return 'Positive'
@@ -171,6 +174,7 @@ class Bayes_Classifier:
       for item in negative:
          negativeSet.add(item)
       allSet = negativeSet | positiveSet
+      print len(allSet)
       for element in allSet:
          if not positive.has_key(element):
             positive[element] = 0
