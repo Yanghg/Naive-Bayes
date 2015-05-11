@@ -112,7 +112,7 @@ class Bayes_Classifier:
       print positiveSum, negativeSum
       if positiveSum - negativeSum > difference - 1.6 and positiveSum - negativeSum < difference + 1.6:
          return 'Neutral'
-      elif positiveSum > negativeSum:
+      elif positiveSum - negativeSum >= difference + 1.6:
          return 'Positive'
       else:
          return 'Negative'
