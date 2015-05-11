@@ -27,15 +27,16 @@ class Bayes_Classifier:
 
       else:
          self.train()
-
+      '''
       print 'positive:'
       for p in self.positive:
          print p + ':' + str(self.positive[p])
       print '\nnegative:'
       for n in self.negative:
          print n + ':' + str(self.negative[n])
-
-
+      '''
+      print self.positiveNum
+      print self.negativeNum
 
    def train(self):   
       """Trains the Naive Bayes Sentiment Classifier."""
@@ -97,19 +98,21 @@ class Bayes_Classifier:
       positive, negative = self.addOneSmoothing()
       positiveProb = float(self.positiveNum)/(self.positiveNum+self.negativeNum)
       negativeProb = float(self.negativeNum)/(self.positiveNum+self.negativeNum)
-      positiveSum = 0
-      negativeSum = 0
+      positiveSum = math.log(positiveProb,2)
+      negativeSum = math.log(negativeProb,2)
       for token in tokenList:
          if positive.has_key(token):
             positiveSum += math.log(float(positive[token])/self.positiveNum,2)
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
-      positiveSum = math.pow(2,positiveSum) * positiveProb
-      negativeSum = math.pow(2,negativeSum) * negativeProb
+      #positiveSum = math.pow(2,positiveSum) * positiveProb
+      #negativeSum = math.pow(2,negativeSum) * negativeProb
       print positiveSum, negativeSum
-      if positiveSum >= negativeSum:
-         return True
+      if positiveSum - negativeSum > 1 and positiveSum - negativeSum < 4:
+         return 'Neutral'
+      elif positiveSum > negativeSum:
+         return 'Positive'
       else:
-         return False
+         return 'Negative'
 
    def loadFile(self, sFilename):
       """Given a file name, return the contents of the file as a string."""
