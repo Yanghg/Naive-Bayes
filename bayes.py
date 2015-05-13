@@ -87,9 +87,6 @@ class Bayes_Classifier:
       if dicP[1] == self.negative:
          print True
       '''
-
-
-
     
    def classify(self, sText):
       """Given a target string sText, this function returns the most likely document
