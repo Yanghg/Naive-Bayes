@@ -94,18 +94,19 @@ class Bayes_Classifier:
       """
       tokenList = self.tokenize(sText)
       positive, negative = self.addOneSmoothing()
+      #useless in this case
       positiveProb = float(self.positiveNum)/(self.positiveNum+self.negativeNum)
       negativeProb = float(self.negativeNum)/(self.positiveNum+self.negativeNum)
-      positiveSum = math.log(positiveProb,2)
-      negativeSum = math.log(negativeProb,2)
+
+      positiveSum = 0
+      negativeSum = 0
       difference = positiveSum - negativeSum
       for token in tokenList:
          token = token.lower()
          if positive.has_key(token):
             positiveSum += math.log(float(positive[token])/self.positiveNum,2)
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
-      #positiveSum = math.pow(2,positiveSum) * positiveProb
-      #negativeSum = math.pow(2,negativeSum) * negativeProb
+      
       print positiveSum, negativeSum
       if positiveSum - negativeSum > difference - 1.6 and positiveSum - negativeSum < difference + 1.6:
          return 'Neutral'
