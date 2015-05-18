@@ -38,18 +38,38 @@ class Bayes_Classifier:
       print self.positiveNum
       print self.negativeNum
 
+   def generateFileList(self,i):
+      trainList = []
+      validateList = []
+      goodList = []
+      badList = []
+      for fFileObj in os.walk('movies_reviews/'):
+         lFileList = fFileObj[2]
+         break
+      #return lFileList
+      for filename in lFileList:
+         if filename[0] == '.':
+            continue
+         rating = int(filename.split('-')[1])
+         if rating == 1:
+            badList.append(filename)
+         else:
+            goodList.append(filename)
+      if i < 10:
+         validateList = goodList[len(goodList)*i/10.0:len(goodList)*(i+1)/10.0]+badList[len(badList)*i/10.0:len(badList)*(i+1)/10.0]
+         trainList = goodList[0:len(goodList)*i/10.0]+goodList[len(goodList)*(i+1)/10.0:len(goodList)]+badList[0:len(badList)*i/10.0]+badList[len(badList)*(i+1)/10.0:len(badList)]
+         return trainList,validateList
+      else:
+         return goodList+badList,[]
+
+
    def train(self):   
       """Trains the Naive Bayes Sentiment Classifier."""
       positiveNum = 0
       negativeNum = 0
       trainData = []
       lFileList = []
-      rating = 0
-      for fFileObj in os.walk('movies_reviews/'):
-         lFileList = fFileObj[2]
-         break
-      #return lFileList
-      for filename in lFileList:
+      for filename in (self.generateFileList(10))[0]:
          if filename[0] == '.':
             continue
          rating = int(filename.split('-')[1])
@@ -114,6 +134,33 @@ class Bayes_Classifier:
          return 'Positive'
       else:
          return 'Negative'
+
+   def classifyList(self,textList):
+      """Given a target string sText, this function returns the most likely document
+      class to which the target string belongs (i.e., positive, negative or neutral).
+      """
+      for sText in textList:
+         tokenList = self.tokenize(sText)
+         positive, negative = self.addOneSmoothing()
+         positiveProb = float(self.positiveNum)/(self.positiveNum+self.negativeNum)
+         negativeProb = float(self.negativeNum)/(self.positiveNum+self.negativeNum)
+         positiveSum = math.log(positiveProb,2)
+         negativeSum = math.log(negativeProb,2)
+         difference = positiveSum - negativeSum
+         for token in tokenList:
+            token = token.lower()
+            if positive.has_key(token):
+               positiveSum += math.log(float(positive[token])/self.positiveNum,2)
+               negativeSum += math.log(float(negative[token])/self.negativeNum,2)
+         #positiveSum = math.pow(2,positiveSum) * positiveProb
+         #negativeSum = math.pow(2,negativeSum) * negativeProb
+         print positiveSum, negativeSum
+         if positiveSum - negativeSum > difference - 1.6 and positiveSum - negativeSum < difference + 1.6:
+            return 'Neutral'
+         elif positiveSum - negativeSum >= difference + 1.6:
+            return 'Positive'
+         else:
+            return 'Negative'
 
    def loadFile(self, sFilename):
       """Given a file name, return the contents of the file as a string."""
@@ -181,5 +228,17 @@ class Bayes_Classifier:
          positive[element] += 1
          negative[element] += 1
       return positive, negative
+
+   def tenFoldValidation(self):
+      result = []
+      for i in range(10):
+         trainList,validateList = self.generateFileList(i)
+         self.train(trainList)
+         self.validate(validateList)
+         result.append(self.classifyList(validateList))
+
+
+         
+
 
 
