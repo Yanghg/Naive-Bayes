@@ -26,7 +26,7 @@ class Bayes_Classifier:
          self.negativeNum = trainData[3]
 
       else:
-         self.train()
+         self.train(self.generateFileList(10)[0])
       '''
       print 'positive:'
       for p in self.positive:
@@ -63,13 +63,13 @@ class Bayes_Classifier:
          return goodList+badList,[]
 
 
-   def train(self):   
+   def train(self,fileList):   
       """Trains the Naive Bayes Sentiment Classifier."""
       positiveNum = 0
       negativeNum = 0
       trainData = []
       lFileList = []
-      for filename in (self.generateFileList(10))[0]:
+      for filename in fileList:
          if filename[0] == '.':
             continue
          rating = int(filename.split('-')[1])

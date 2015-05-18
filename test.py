@@ -1,4 +1,4 @@
-execfile('bayesbest.py')
+execfile('bayes.py')
 bc = Bayes_Classifier()
 result = bc.classify("I hate my AI class")
 print result
