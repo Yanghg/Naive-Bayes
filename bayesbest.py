@@ -5,6 +5,7 @@
 #
 
 import math, os, pickle, re, copy
+import nltk
 
 class Bayes_Classifier:
 
@@ -59,13 +60,28 @@ class Bayes_Classifier:
          reviewWords = self.tokenize(reviewStr)
          tempDic = {}
          #put words of a document into two dictionarys
-         for word in reviewWords:
-            word = word.lower()
+         i = 0
+         while i < len(reviewWords):
+            #print reviewWords
+            word = reviewWords[i].lower()
+            if len(word) == 1 and ord(word) >= 128:
+               break
+            porter = nltk.PorterStemmer()
+            word = str(porter.stem(word))
             # cancel the useless part before the turn
+            '''
             if word == 'but' or word == 'however':
                tempDic = {}
-            elif not tempDic.has_key(word):
+            '''
+            #extract negative part
+            if word[-3:] == "not" or word[-3:] == "n't":
+               if i + 1 < len(reviewWords):
+                  word = 'n-' + reviewWords[i+1]
+                  i = i + 1
+            
+            if not tempDic.has_key(word):
                tempDic[word] = True
+            i = i + 1
          if (rating == 5):
             positiveNum += 1
             for key in tempDic:
@@ -114,9 +130,9 @@ class Bayes_Classifier:
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
       
       print positiveSum, negativeSum
-      if positiveSum - negativeSum > difference - 1.6 and positiveSum - negativeSum < difference + 1.6:
+      if positiveSum - negativeSum > difference - 1.5 and positiveSum - negativeSum < difference + 1.6:
          return 'Neutral'
-      elif positiveSum - negativeSum >= difference + 1.6:
+      elif positiveSum - negativeSum >= difference + 1.5:
          return 'Positive'
       else:
          return 'Negative'
