@@ -166,7 +166,7 @@ class Bayes_Classifier:
             break
          porter = nltk.PorterStemmer()
          token = str(porter.stem(token))
-         if token in self.checkset :
+         if token in self.uselesswords :
             continue
          #extract negative part
          if token == "not" or token[-3:] == "n't":
