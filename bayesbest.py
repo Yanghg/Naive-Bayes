@@ -19,7 +19,7 @@ class Bayes_Classifier:
       self.positiveNum = 0
       self.negativeNum = 0
       # self.uselessword=['a','an','is','am','are','the','here','there','I','you','he','she','him','his','hers','her','it','its','this','that','which']
-      self.uselesswords = {'i', 'you', 'he',  'she', 'it', 'we', 'they' 'my', 'your',  'its', 'our',  'their', 'mine', 'yours', 'his', 'hers', 'ours', 'theirs', 'me', 'him', 'her', 'us', 'them', 'this', 'that', 'these', 'those',  'a', 'the', 'which','whose','whom'}
+      self.uselesswords = set({'i', 'you', 'he',  'she', 'it', 'we', 'they' 'my', 'your',  'its', 'our',  'their', 'mine', 'yours', 'his', 'hers', 'ours', 'theirs', 'me', 'him', 'her', 'us', 'them', 'this', 'that', 'these', 'those',  'a', 'the', 'which','whose','whom'})
       # self.checkset=set()
       # for i in self.uselessword:
       #    self.checkset.add(i)
@@ -100,6 +100,7 @@ class Bayes_Classifier:
                break
             porter = nltk.PorterStemmer()
             word = str(porter.stem(word))
+
             #remove useless words
             if word in self.uselesswords:
                i += 1
@@ -171,6 +172,8 @@ class Bayes_Classifier:
             break
          porter = nltk.PorterStemmer()
          token = str(porter.stem(token))
+
+         #remove useless words
          if token in self.uselesswords :
             i += 1
             continue
