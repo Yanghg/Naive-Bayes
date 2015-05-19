@@ -178,12 +178,28 @@ class Bayes_Classifier:
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
       
       print positiveSum, negativeSum
-      if positiveSum - negativeSum > difference - 1.5 and positiveSum - negativeSum < difference + 1.5:
-         return 'Neutral'
-      elif positiveSum - negativeSum >= difference + 1.5:
-         return 'Positive'
+      if not isList:
+         if positiveSum - negativeSum > difference - 1.5 and positiveSum - negativeSum < difference + 1.5:
+            return 'Neutral'
+         elif positiveSum - negativeSum >= difference + 1.5:
+            return 'Positive'
+         else:
+            return 'Negative'
       else:
-         return 'Negative'
+         if positiveSum > negativeSum:
+            if rating == 5:
+               print "right"
+               return 1
+            else:
+               print "wrong"
+               return 0
+         else:
+            if rating == 1:
+               print "right"
+               return 1
+            else:
+               print "wrong"
+               return 0
 
    def loadFile(self, sFilename):
       """Given a file name, return the contents of the file as a string."""
