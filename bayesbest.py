@@ -105,7 +105,7 @@ class Bayes_Classifier:
                tempDic = {}
             '''
             #extract negative part
-            if word[-3:] == "not" or word[-3:] == "n't":
+            if word == "not" or word[-3:] == "n't":
                if i + 1 < len(reviewWords):
                   word = 'n-' + reviewWords[i+1]
                   i += 1 
@@ -146,6 +146,7 @@ class Bayes_Classifier:
       class to which the target string belongs (i.e., positive, negative or neutral).
       """
       tokenList = self.tokenize(sText)
+      print tokenList
       positive, negative = self.addOneSmoothing()
       #useless in this case
       positiveProb = float(self.positiveNum)/(self.positiveNum+self.negativeNum)
@@ -159,6 +160,7 @@ class Bayes_Classifier:
       while i < len(tokenList):
          #turn letters to lowercase
          token = tokenList[i].lower()
+         print token
          #extract stem of words
          if len(token) == 1 and ord(token) >= 128:
             break
@@ -167,12 +169,13 @@ class Bayes_Classifier:
          if token in self.checkset :
             continue
          #extract negative part
-         if token[-3:] == "not" or token[-3:] == "n't":
+         if token == "not" or token[-3:] == "n't":
                if i + 1 < len(tokenList):
-                  token = 'n-' + tokenList[i+1]
+                  token = "n-" + tokenList[i+1]
                   i += 1
+                  print token
          i += 1 
-
+         #print token
          if positive.has_key(token):
             positiveSum += math.log(float(positive[token])/self.positiveNum,2)
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
@@ -225,7 +228,7 @@ class Bayes_Classifier:
       dObj = u.load()
       f.close()
       return dObj
-
+   #there is problem with tokenize, don't to don ' t
    def tokenize(self, sText): 
       """Given a string of text sText, returns a list of the individual tokens that 
       occur in that string (in order)."""
@@ -233,7 +236,7 @@ class Bayes_Classifier:
       lTokens = []
       sToken = ""
       for c in sText:
-         if re.match("[a-zA-Z0-9]", str(c)) != None or c == "\"" or c == "_" or c == "-":
+         if re.match("[a-zA-Z0-9]", str(c)) != None or c == "\"" or c == "_" or c == "-" or c =="'":
             sToken += c
          else:
             if sToken != "":

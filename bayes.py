@@ -180,7 +180,7 @@ class Bayes_Classifier:
       lTokens = []
       sToken = ""
       for c in sText:
-         if re.match("[a-zA-Z0-9]", str(c)) != None or c == "\"" or c == "_" or c == "-":
+         if re.match("[a-zA-Z0-9]", str(c)) != None or c == "\"" or c == "_" or c == "-" or c == "'":
             sToken += c
          else:
             if sToken != "":
