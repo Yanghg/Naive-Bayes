@@ -174,6 +174,8 @@ class Bayes_Classifier:
          token = tokenList[i].lower()
          
          #extract stem of words
+         if len(token) == 1 and ord(token) >= 128:
+               break
          porter = nltk.PorterStemmer()
          token = str(porter.stem(token))
 
