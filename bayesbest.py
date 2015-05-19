@@ -67,7 +67,7 @@ class Bayes_Classifier:
       else:
          return goodList+badList,[]
 
-   def train(self,fileList):  
+   def train(self,fileList,isTenFold = False):  
       #print fileList 
       """Trains the Naive Bayes Sentiment Classifier."""
       positiveNum = 0
@@ -142,8 +142,9 @@ class Bayes_Classifier:
       trainData.append(self.positive)
       trainData.append(self.negative)
       trainData.append(positiveNum)
-      trainData.append(negativeNum)     
-      self.save(trainData,'store.pkl')
+      trainData.append(negativeNum)
+      if not isTenFold:     
+         self.save(trainData,'store.pkl')
       print ""
       '''
       dicP = self.load('store.pkl')
@@ -239,6 +240,7 @@ class Bayes_Classifier:
       dObj = u.load()
       f.close()
       return dObj
+   
    #there is problem with tokenize, don't to don ' t
    def tokenize(self, sText): 
       """Given a string of text sText, returns a list of the individual tokens that 
@@ -306,7 +308,7 @@ class Bayes_Classifier:
       result = []
       for i in range(10):
          trainList,validateList = self.generateFileList(i)
-         self.train(trainList)
+         self.train(trainList,True)
          validateDataList = self.validate(validateList)
          result.append(self.classifyList(validateDataList))
       return result
