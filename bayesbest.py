@@ -32,6 +32,7 @@ class Bayes_Classifier:
 
       else:
          self.train(self.generateFileList(10)[0])
+         print ""
       '''
       print 'positive:'
       for p in self.positive:
@@ -79,9 +80,14 @@ class Bayes_Classifier:
       #    lFileList = fFileObj[2]
       #    break
       # #return lFileList
-
+      count = 0
       #put words of all documents into two dictionarys
       for filename in fileList:
+         count += 1
+         percentTraining = int(100*float(count)/len(fileList))
+         if percentTraining > 100:
+            percentTraining = 100
+         print "training processing bar:" + str(percentTraining) + "%" + "\r",
          if filename[0] == '.':
             continue
          rating = int(filename.split('-')[1])
@@ -188,8 +194,8 @@ class Bayes_Classifier:
             positiveSum += math.log(float(positive[token])/self.positiveNum,2)
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
       
-      print "positive result:" + str(positiveSum)
-      print "negative result:" + str(negativeSum)
+      #print "positive result:" + str(positiveSum)
+      #print "negative result:" + str(negativeSum)
       if not isList:
          if positiveSum - negativeSum > difference - 1.5 and positiveSum - negativeSum < difference + 1.5:
             return 'Neutral'
