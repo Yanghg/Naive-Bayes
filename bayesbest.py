@@ -31,7 +31,7 @@ class Bayes_Classifier:
          self.negativeNum = trainData[3]
 
       else:
-         self.train()
+         self.train(self.generateFileList(10)[0])
       '''
       print 'positive:'
       for p in self.positive:
@@ -43,20 +43,44 @@ class Bayes_Classifier:
       print self.positiveNum
       print self.negativeNum
 
-   def train(self):   
-      """Trains the Naive Bayes Sentiment Classifier."""
-      positiveNum = 0
-      negativeNum = 0
-      trainData = []
-      lFileList = []
-      rating = 0
+   def generateFileList(self,i):
+      trainList = []
+      validateList = []
+      goodList = []
+      badList = []
       for fFileObj in os.walk('movies_reviews/'):
          lFileList = fFileObj[2]
          break
       #return lFileList
+      for filename in lFileList:
+         if filename[0] == '.':
+            continue
+         rating = int(filename.split('-')[1])
+         if rating == 1:
+            badList.append(filename)
+         else:
+            goodList.append(filename)
+      if i < 10:
+         validateList = goodList[int(len(goodList)*i/10.0):int(len(goodList)*(i+1)/10.0)]+badList[int(len(badList)*i/10.0):int(len(badList)*(i+1)/10.0)]
+         trainList = goodList[0:int(len(goodList)*i/10.0)]+goodList[int(len(goodList)*(i+1)/10.0):len(goodList)]+badList[0:int(len(badList)*i/10.0)]+badList[int(len(badList)*(i+1)/10.0):len(badList)]
+         return trainList,validateList
+      else:
+         return goodList+badList,[]
+
+   def train(self,fileList):   
+      """Trains the Naive Bayes Sentiment Classifier."""
+      positiveNum = 0
+      negativeNum = 0
+      trainData = []
+      # lFileList = []
+      # rating = 0
+      # for fFileObj in os.walk('movies_reviews/'):
+      #    lFileList = fFileObj[2]
+      #    break
+      # #return lFileList
 
       #put words of all documents into two dictionarys
-      for filename in lFileList:
+      for filename in fileList:
          if filename[0] == '.':
             continue
          rating = int(filename.split('-')[1])
@@ -73,7 +97,7 @@ class Bayes_Classifier:
                break
             porter = nltk.PorterStemmer()
             word = str(porter.stem(word))
-            if word in self.checkset :
+            if word in self.uselesswords :
                continue
             # cancel the useless part before the turn
             '''
@@ -116,8 +140,8 @@ class Bayes_Classifier:
       if dicP[1] == self.negative:
          print True
       '''
-    
-   def classify(self, sText):
+
+   def classify(self, sText, isList = False, rating=1):
       """Given a target string sText, this function returns the most likely document
       class to which the target string belongs (i.e., positive, negative or neutral).
       """
@@ -227,5 +251,33 @@ class Bayes_Classifier:
          positive[element] += 1
          negative[element] += 1
       return positive, negative
+
+   def validate(self,validateList):
+      validateDataList = [] 
+      for filename in validateList:
+         rating = int(filename.split('-')[1])
+         reviewStr = self.loadFile('movies_reviews/' + filename)
+         validateDataList.append((reviewStr,rating))
+      return validateDataList
+
+   def classifyList(self,validateDataList):
+      """Given a target string sText, this function returns the most likely document
+      class to which the target string belongs (i.e., positive, negative or neutral).
+      """
+      correct = 0;
+      print len(validateDataList)
+      for item in validateDataList:
+         correct += self.classify(item[0],True,item[1])
+      return ((float)(correct))/len(validateDataList)
+
+   def tenFoldValidation(self):
+      result = []
+      for i in range(10):
+         trainList,validateList = self.generateFileList(i)
+         self.train(trainList)
+         validateDataList = self.validate(validateList)
+         result.append(self.classifyList(validateDataList))
+      return result
+
 
 
