@@ -40,8 +40,8 @@ class Bayes_Classifier:
       for n in self.negative:
          print n + ':' + str(self.negative[n])
       '''
-      print self.positiveNum
-      print self.negativeNum
+      # print self.positiveNum
+      # print self.negativeNum
 
    def generateFileList(self,i):
       trainList = []
@@ -89,7 +89,7 @@ class Bayes_Classifier:
          reviewWords = self.tokenize(reviewStr)
          tempDic = {}
 
-         print reviewWords
+         #print reviewWords
          #put words of a document into two dictionarys
          i = 0
          while i < len(reviewWords):
@@ -188,7 +188,8 @@ class Bayes_Classifier:
             positiveSum += math.log(float(positive[token])/self.positiveNum,2)
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
       
-      print positiveSum, negativeSum
+      print "positive result:" + str(positiveSum)
+      print "negative result:" + str(negativeSum)
       if not isList:
          if positiveSum - negativeSum > difference - 1.5 and positiveSum - negativeSum < difference + 1.5:
             return 'Neutral'
@@ -199,17 +200,17 @@ class Bayes_Classifier:
       else:
          if positiveSum > negativeSum:
             if rating == 5:
-               print "right"
+               #print "right"
                return 1
             else:
-               print "wrong"
+               #print "wrong"
                return 0
          else:
             if rating == 1:
-               print "right"
+               #print "right"
                return 1
             else:
-               print "wrong"
+               #print "wrong"
                return 0
 
    def loadFile(self, sFilename):
@@ -269,7 +270,7 @@ class Bayes_Classifier:
       for item in negative:
          negativeSet.add(item)
       allSet = negativeSet | positiveSet
-      print len(allSet)
+      #print len(allSet)
       for element in allSet:
          if not positive.has_key(element):
             positive[element] = 0
@@ -292,9 +293,10 @@ class Bayes_Classifier:
       class to which the target string belongs (i.e., positive, negative or neutral).
       """
       correct = 0
-      print len(validateDataList)
+      #print len(validateDataList)
       for item in validateDataList:
          correct += self.classify(item[0],True,item[1])
+         print str(correct) + " " + str(len(validateDataList)) + "\r",
       return ((float)(correct))/len(validateDataList)
 
    def tenFoldValidation(self):
