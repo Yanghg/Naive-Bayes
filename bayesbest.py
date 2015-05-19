@@ -18,10 +18,11 @@ class Bayes_Classifier:
       self.negative = {}
       self.positiveNum = 0
       self.negativeNum = 0
-      self.uselessword=['a','an','is','am','are','the','here','there','I','you','he','she','him','his','hers','her','it','its','this','that','which']
-      self.checkset=set()
-      for i in self.uselessword:
-         self.checkset.add(i)
+      # self.uselessword=['a','an','is','am','are','the','here','there','I','you','he','she','him','his','hers','her','it','its','this','that','which']
+      self.uselesswords = {'i', 'you', 'he',  'she', 'it', 'we', 'they' 'my', 'your',  'its', 'our',  'their', 'mine', 'yours', 'his', 'hers', 'ours', 'theirs', 'me', 'him', 'her', 'us', 'them', 'this', 'that', 'these', 'those',  'a', 'the', 'which','whose','whom'}
+      # self.checkset=set()
+      # for i in self.uselessword:
+      #    self.checkset.add(i)
       if os.path.isfile('store.pkl'):
          trainData = self.load('store.pkl')
          self.positive = trainData[0]
