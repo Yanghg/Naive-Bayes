@@ -32,7 +32,6 @@ class Bayes_Classifier:
 
       else:
          self.train(self.generateFileList(10)[0])
-         print ""
       '''
       print 'positive:'
       for p in self.positive:
@@ -145,6 +144,7 @@ class Bayes_Classifier:
       trainData.append(positiveNum)
       trainData.append(negativeNum)     
       self.save(trainData,'store.pkl')
+      print ""
       '''
       dicP = self.load('store.pkl')
       if dicP[0] == self.positive:
@@ -174,15 +174,9 @@ class Bayes_Classifier:
          token = tokenList[i].lower()
          
          #extract stem of words
-         if len(token) == 1 and ord(token) >= 128:
-            break
          porter = nltk.PorterStemmer()
          token = str(porter.stem(token))
 
-         #remove useless words
-         if token in self.uselesswords :
-            i += 1
-            continue
          #extract negative part
          if token == "not" or token[-3:] == "n't":
                if i + 1 < len(tokenList):
