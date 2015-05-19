@@ -18,11 +18,6 @@ class Bayes_Classifier:
       self.negative = {}
       self.positiveNum = 0
       self.negativeNum = 0
-      # self.uselessword=['a','an','is','am','are','the','here','there','I','you','he','she','him','his','hers','her','it','its','this','that','which']
-      self.uselesswords = set({'i', 'you', 'he',  'she', 'it', 'we', 'they' 'my', 'your',  'its', 'our',  'their', 'mine', 'yours', 'his', 'hers', 'ours', 'theirs', 'me', 'him', 'her', 'us', 'them', 'this', 'that', 'these', 'those',  'a', 'the', 'which','whose','whom', ',', ';','.'})
-      # self.checkset=set()
-      # for i in self.uselessword:
-      #    self.checkset.add(i)
       if os.path.isfile('store.pkl'):
          trainData = self.load('store.pkl')
          self.positive = trainData[0]
@@ -32,14 +27,6 @@ class Bayes_Classifier:
 
       else:
          self.train(self.generateFileList(10)[0])
-      '''
-      print 'positive:'
-      for p in self.positive:
-         print p + ':' + str(self.positive[p])
-      print '\nnegative:'
-      for n in self.negative:
-         print n + ':' + str(self.negative[n])
-      '''
       # print self.positiveNum
       # print self.negativeNum
 
@@ -113,13 +100,6 @@ class Bayes_Classifier:
       if not isTenFold:     
          self.save(trainData,'store.pkl')
       print ""
-      '''
-      dicP = self.load('store.pkl')
-      if dicP[0] == self.positive:
-         print True
-      if dicP[1] == self.negative:
-         print True
-      '''
 
    def classify(self, sText, isList = False, rating=1):
       """Given a target string sText, this function returns the most likely document
