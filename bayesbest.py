@@ -4,7 +4,7 @@
 #
 #
 
-import math, os, pickle, re, copy
+import math, os, pickle, re, copy, sys
 import nltk
 
 class Bayes_Classifier:
@@ -86,7 +86,8 @@ class Bayes_Classifier:
          percentTraining = int(100*float(count)/len(fileList))
          if percentTraining > 100:
             percentTraining = 100
-         print "training processing bar:" + str(percentTraining) + "%" + "\r",
+         sys.stdout.write( "Training Progress: %d%%\r" % percentTraining)  
+         sys.stdout.flush()   
          if filename[0] == '.':
             continue
          rating = int(filename.split('-')[1])
@@ -194,12 +195,13 @@ class Bayes_Classifier:
       #print "positive result:" + str(positiveSum)
       #print "negative result:" + str(negativeSum)
       if not isList:
+         print "Text Sample: "+sText
          if positiveSum - negativeSum > difference - 1.5 and positiveSum - negativeSum < difference + 1.5:
-            return 'Neutral'
+            return "Prediction Result: Neutral"
          elif positiveSum - negativeSum >= difference + 1.5:
-            return 'Positive'
+            return "Prediction Result: Positive"
          else:
-            return 'Negative'
+            return "Prediction Result: Negative"
       else:
          if positiveSum > negativeSum:
             if rating == 5:
@@ -240,7 +242,7 @@ class Bayes_Classifier:
       dObj = u.load()
       f.close()
       return dObj
-   
+
    #there is problem with tokenize, don't to don ' t
    def tokenize(self, sText): 
       """Given a string of text sText, returns a list of the individual tokens that 
@@ -297,20 +299,31 @@ class Bayes_Classifier:
       class to which the target string belongs (i.e., positive, negative or neutral).
       """
       correct = 0
+      count = 0
+      totalCount = len(validateDataList)
       #print len(validateDataList)
       for item in validateDataList:
+         count += 1
          correct += self.classify(item[0],True,item[1])
-         print str(correct) + " " + str(len(validateDataList)) + "\r",
+         currentPercentage = int((float(count)*100)/totalCount)
+         if currentPercentage > 100:
+            currentPercentage = 100
+         sys.stdout.write( "Validatoin Progress: %d%%\r" % currentPercentage)   
+         sys.stdout.flush()
+      result = (float(correct))/totalCount
       print ""
-      return ((float)(correct))/len(validateDataList)
+      print "Validation Result: " + str(result)
+      return result
 
    def tenFoldValidation(self):
       result = []
       for i in range(10):
+         print "No."+str(i+1)+" Fold Validation:"
          trainList,validateList = self.generateFileList(i)
          self.train(trainList,True)
          validateDataList = self.validate(validateList)
          result.append(self.classifyList(validateDataList))
+         print ""
       return result
 
 

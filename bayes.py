@@ -4,7 +4,8 @@
 #
 #
 
-import math, os, pickle, re, copy
+import math, os, pickle, re, copy, sys
+
 
 class Bayes_Classifier:
 
@@ -17,7 +18,11 @@ class Bayes_Classifier:
       self.negative = {}
       self.positiveNum = 0
       self.negativeNum = 0
-      
+      # self.uselessword=['a','an','is','am','are','the','here','there','I','you','he','she','him','his','hers','her','it','its','this','that','which']
+      self.uselesswords = set({'i', 'you', 'he',  'she', 'it', 'we', 'they' 'my', 'your',  'its', 'our',  'their', 'mine', 'yours', 'his', 'hers', 'ours', 'theirs', 'me', 'him', 'her', 'us', 'them', 'this', 'that', 'these', 'those',  'a', 'the', 'which','whose','whom', ',', ';','.'})
+      # self.checkset=set()
+      # for i in self.uselessword:
+      #    self.checkset.add(i)
       if os.path.isfile('store.pkl'):
          trainData = self.load('store.pkl')
          self.positive = trainData[0]
@@ -35,8 +40,8 @@ class Bayes_Classifier:
       for n in self.negative:
          print n + ':' + str(self.negative[n])
       '''
-      print self.positiveNum
-      print self.negativeNum
+      # print self.positiveNum
+      # print self.negativeNum
 
    def generateFileList(self,i):
       trainList = []
@@ -62,8 +67,7 @@ class Bayes_Classifier:
       else:
          return goodList+badList,[]
 
-
-   def train(self,fileList):   
+   def train(self,fileList,isTenFold = False):   
       """Trains the Naive Bayes Sentiment Classifier."""
       positiveNum = 0
       negativeNum = 0
@@ -96,7 +100,9 @@ class Bayes_Classifier:
       trainData.append(self.negative)
       trainData.append(positiveNum)
       trainData.append(negativeNum)     
-      self.save(trainData,'store.pkl')
+      if not isTenFold:     
+         self.save(trainData,'store.pkl')
+      print ""
       '''
       dicP = self.load('store.pkl')
       if dicP[0] == self.positive:
@@ -104,7 +110,7 @@ class Bayes_Classifier:
       if dicP[1] == self.negative:
          print True
       '''
-    
+
    def classify(self, sText, isList = False, rating=1):
       """Given a target string sText, this function returns the most likely document
       class to which the target string belongs (i.e., positive, negative or neutral).
@@ -124,28 +130,30 @@ class Bayes_Classifier:
             positiveSum += math.log(float(positive[token])/self.positiveNum,2)
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
       
-      #print positiveSum, negativeSum
+      #print "positive result:" + str(positiveSum)
+      #print "negative result:" + str(negativeSum)
       if not isList:
-         if positiveSum - negativeSum > difference - 1.6 and positiveSum - negativeSum < difference + 1.6:
-            return 'Neutral'
-         elif positiveSum - negativeSum >= difference + 1.6:
-            return 'Positive'
+         print "Text Sample: "+sText
+         if positiveSum - negativeSum > difference - 1.5 and positiveSum - negativeSum < difference + 1.5:
+            return "Prediction Result: Neutral"
+         elif positiveSum - negativeSum >= difference + 1.5:
+            return "Prediction Result: Positive"
          else:
-            return 'Negative'
+            return "Prediction Result: Negative"
       else:
          if positiveSum > negativeSum:
             if rating == 5:
-               print "right"
+               #print "right"
                return 1
             else:
-               print "wrong"
+               #print "wrong"
                return 0
          else:
             if rating == 1:
-               print "right"
+               #print "right"
                return 1
             else:
-               print "wrong"
+               #print "wrong"
                return 0
 
    def loadFile(self, sFilename):
@@ -173,6 +181,7 @@ class Bayes_Classifier:
       f.close()
       return dObj
 
+   #there is problem with tokenize, don't to don ' t
    def tokenize(self, sText): 
       """Given a string of text sText, returns a list of the individual tokens that 
       occur in that string (in order)."""
@@ -180,7 +189,7 @@ class Bayes_Classifier:
       lTokens = []
       sToken = ""
       for c in sText:
-         if re.match("[a-zA-Z0-9]", str(c)) != None or c == "\"" or c == "_" or c == "-" or c == "'":
+         if re.match("[a-zA-Z0-9]", str(c)) != None or c == "\"" or c == "_" or c == "-" or c =="'":
             sToken += c
          else:
             if sToken != "":
@@ -228,19 +237,36 @@ class Bayes_Classifier:
       class to which the target string belongs (i.e., positive, negative or neutral).
       """
       correct = 0
-      print len(validateDataList)
+      count = 0
+      totalCount = len(validateDataList)
+      #print len(validateDataList)
       for item in validateDataList:
+         count += 1
          correct += self.classify(item[0],True,item[1])
-      return ((float)(correct))/len(validateDataList)
+         currentPercentage = int((float(count)*100)/totalCount)
+         if currentPercentage > 100:
+            currentPercentage = 100
+         sys.stdout.write( "Validatoin Progress: %d%%\r" % currentPercentage)   
+         sys.stdout.flush()
+      result = (float(correct))/totalCount
+      print ""
+      print "Validation Result: " + str(result)
+      return result
 
    def tenFoldValidation(self):
       result = []
       for i in range(10):
+         print "No."+str(i+1)+" Fold Validation:"
          trainList,validateList = self.generateFileList(i)
-         self.train(trainList)
+         self.train(trainList,True)
          validateDataList = self.validate(validateList)
          result.append(self.classifyList(validateDataList))
+         print ""
       return result
+
+
+
+
 
          
 
