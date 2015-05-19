@@ -105,7 +105,7 @@ class Bayes_Classifier:
          print True
       '''
     
-   def classify(self, sText):
+   def classify(self, sText, isList = False, rating=1):
       """Given a target string sText, this function returns the most likely document
       class to which the target string belongs (i.e., positive, negative or neutral).
       """
@@ -124,13 +124,29 @@ class Bayes_Classifier:
             positiveSum += math.log(float(positive[token])/self.positiveNum,2)
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
       
-      print positiveSum, negativeSum
-      if positiveSum - negativeSum > difference - 1.6 and positiveSum - negativeSum < difference + 1.6:
-         return 'Neutral'
-      elif positiveSum - negativeSum >= difference + 1.6:
-         return 'Positive'
+      #print positiveSum, negativeSum
+      if not isList:
+         if positiveSum - negativeSum > difference - 1.6 and positiveSum - negativeSum < difference + 1.6:
+            return 'Neutral'
+         elif positiveSum - negativeSum >= difference + 1.6:
+            return 'Positive'
+         else:
+            return 'Negative'
       else:
-         return 'Negative'
+         if positiveSum > negativeSum:
+            if rating == 5:
+               print "right"
+               return 1
+            else:
+               print "wrong"
+               return 0
+         else:
+            if rating == 1:
+               print "right"
+               return 1
+            else:
+               print "wrong"
+               return 0
 
    def loadFile(self, sFilename):
       """Given a file name, return the contents of the file as a string."""
@@ -214,34 +230,32 @@ class Bayes_Classifier:
       correct = 0;
       print len(validateDataList)
       for item in validateDataList:
-         tokenList = self.tokenize(item[0])
-         positive, negative = self.addOneSmoothing()
-         positiveProb = float(self.positiveNum)/(self.positiveNum+self.negativeNum)
-         negativeProb = float(self.negativeNum)/(self.positiveNum+self.negativeNum)
-         positiveSum = math.log(positiveProb,2)
-         negativeSum = math.log(negativeProb,2)
-         difference = positiveSum - negativeSum
-         for token in tokenList:
-            token = token.lower()
-            if positive.has_key(token):
-               positiveSum += math.log(float(positive[token])/self.positiveNum,2)
-               negativeSum += math.log(float(negative[token])/self.negativeNum,2)
-         #positiveSum = math.pow(2,positiveSum) * positiveProb
-         #negativeSum = math.pow(2,negativeSum) * negativeProb
-         #print positiveSum, negativeSum
+         correct += self.classify(item[0],True,item[1])
+         # tokenList = self.tokenize(item[0])
+         # positive, negative = self.addOneSmoothing()
+         # positiveProb = float(self.positiveNum)/(self.positiveNum+self.negativeNum)
+         # negativeProb = float(self.negativeNum)/(self.positiveNum+self.negativeNum)
+         # positiveSum = math.log(positiveProb,2)
+         # negativeSum = math.log(negativeProb,2)
+         # difference = positiveSum - negativeSum
+         # for token in tokenList:
+         #    token = token.lower()
+         #    if positive.has_key(token):
+         #       positiveSum += math.log(float(positive[token])/self.positiveNum,2)
+         #       negativeSum += math.log(float(negative[token])/self.negativeNum,2)
          
-         if positiveSum > negativeSum:
-            if item[1] == 5:
-               correct += 1
-               print "right", correct
-            else:
-               print "wrong"
-         else:
-            if item[1] == 1:
-               correct += 1
-               print "right", correct
-            else:
-               print "wrong"
+         # if positiveSum > negativeSum:
+         #    if item[1] == 5:
+         #       correct += 1
+         #       print "right", correct
+         #    else:
+         #       print "wrong"
+         # else:
+         #    if item[1] == 1:
+         #       correct += 1
+         #       print "right", correct
+         #    else:
+         #       print "wrong"
 
       #print correct, len(validateDataList)
       return ((float)(correct))/len(validateDataList)
