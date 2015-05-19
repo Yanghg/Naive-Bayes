@@ -62,8 +62,9 @@ class Bayes_Classifier:
          #put words of a document into two dictionarys
          i = 0
          while i < len(reviewWords):
-            #print reviewWords
+            #turn letters of the word to lowercase
             word = reviewWords[i].lower()
+            #extract stem of words
             if len(word) == 1 and ord(word) >= 128:
                break
             porter = nltk.PorterStemmer()
@@ -77,11 +78,11 @@ class Bayes_Classifier:
             if word[-3:] == "not" or word[-3:] == "n't":
                if i + 1 < len(reviewWords):
                   word = 'n-' + reviewWords[i+1]
-                  i = i + 1
+                  i += 1 
             
             if not tempDic.has_key(word):
                tempDic[word] = True
-            i = i + 1
+            i += 1 
          if (rating == 5):
             positiveNum += 1
             for key in tempDic:
@@ -123,14 +124,30 @@ class Bayes_Classifier:
       positiveSum = 0
       negativeSum = 0
       difference = positiveSum - negativeSum
-      for token in tokenList:
-         token = token.lower()
+      i = 0
+
+      while i < len(tokenList):
+         #turn letters to lowercase
+         token = tokenList[i].lower()
+         #extract stem of words
+         if len(token) == 1 and ord(token) >= 128:
+            break
+         porter = nltk.PorterStemmer()
+         token = str(porter.stem(token))
+
+         #extract negative part
+         if token[-3:] == "not" or token[-3:] == "n't":
+               if i + 1 < len(tokenList):
+                  token = 'n-' + tokenList[i+1]
+                  i += 1
+         i += 1 
+
          if positive.has_key(token):
             positiveSum += math.log(float(positive[token])/self.positiveNum,2)
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
       
       print positiveSum, negativeSum
-      if positiveSum - negativeSum > difference - 1.5 and positiveSum - negativeSum < difference + 1.6:
+      if positiveSum - negativeSum > difference - 1.5 and positiveSum - negativeSum < difference + 1.5:
          return 'Neutral'
       elif positiveSum - negativeSum >= difference + 1.5:
          return 'Positive'
