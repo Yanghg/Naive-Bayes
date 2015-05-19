@@ -78,7 +78,7 @@ class Bayes_Classifier:
             word = word.lower()
             if not tempDic.has_key(word):
                tempDic[word] = True
-         if (rating == 5):
+         if rating == 5:
             positiveNum += 1
             for key in tempDic:
                if not self.positive.has_key(key):
@@ -245,6 +245,7 @@ class Bayes_Classifier:
 
    def tenFoldValidation(self):
       result = []
+      sum = 0
       for i in range(10):
          print "No."+str(i+1)+" Fold Validation:"
          trainList,validateList = self.generateFileList(i)
@@ -252,7 +253,10 @@ class Bayes_Classifier:
          validateDataList = self.validate(validateList)
          result.append(self.classifyList(validateDataList))
          print ""
-      return result
+      for i in result:
+         sum+=i
+      print "Average Validation Rate for Naive Bayes: "+str(float(sum)/10)
+      #return result
 
 
 
