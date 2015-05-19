@@ -299,6 +299,7 @@ class Bayes_Classifier:
       for item in validateDataList:
          correct += self.classify(item[0],True,item[1])
          print str(correct) + " " + str(len(validateDataList)) + "\r",
+      print ""
       return ((float)(correct))/len(validateDataList)
 
    def tenFoldValidation(self):
