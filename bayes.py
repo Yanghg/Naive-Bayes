@@ -72,7 +72,17 @@ class Bayes_Classifier:
       positiveNum = 0
       negativeNum = 0
       trainData = []
+      count = 0
+      #put words of all documents into two dictionarys
       for filename in fileList:
+         count += 1
+         percentTraining = int(100*float(count)/len(fileList))
+         if percentTraining > 100:
+            percentTraining = 100
+         sys.stdout.write( "Training Progress: %d%%\r" % percentTraining)  
+         sys.stdout.flush()   
+         if filename[0] == '.':
+            continue
          rating = int(filename.split('-')[1])
          reviewStr = self.loadFile('movies_reviews/' + filename)
          reviewWords = self.tokenize(reviewStr)

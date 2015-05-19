@@ -73,12 +73,6 @@ class Bayes_Classifier:
       positiveNum = 0
       negativeNum = 0
       trainData = []
-      # lFileList = []
-      # rating = 0
-      # for fFileObj in os.walk('movies_reviews/'):
-      #    lFileList = fFileObj[2]
-      #    break
-      # #return lFileList
       count = 0
       #put words of all documents into two dictionarys
       for filename in fileList:
