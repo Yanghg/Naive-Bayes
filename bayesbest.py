@@ -20,7 +20,7 @@ class Bayes_Classifier:
       self.negativeNum = 0
       self.uselessword=['a','an','is','am','are','the','here','there','I','you','he','she','him','his','hers','her','it','its','this','that','which']
       self.checkset=set()
-      for i in uselessword:
+      for i in self.uselessword:
          self.checkset.add(i)
       if os.path.isfile('store.pkl'):
          trainData = self.load('store.pkl')
