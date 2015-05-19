@@ -98,6 +98,7 @@ class Bayes_Classifier:
             porter = nltk.PorterStemmer()
             word = str(porter.stem(word))
             if word in self.uselesswords :
+               i += 1
                continue
             # cancel the useless part before the turn
             '''
@@ -167,6 +168,7 @@ class Bayes_Classifier:
          porter = nltk.PorterStemmer()
          token = str(porter.stem(token))
          if token in self.uselesswords :
+            i += 1
             continue
          #extract negative part
          if token == "not" or token[-3:] == "n't":
