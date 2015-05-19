@@ -227,7 +227,7 @@ class Bayes_Classifier:
       """Given a target string sText, this function returns the most likely document
       class to which the target string belongs (i.e., positive, negative or neutral).
       """
-      correct = 0;
+      correct = 0
       print len(validateDataList)
       for item in validateDataList:
          correct += self.classify(item[0],True,item[1])
