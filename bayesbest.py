@@ -18,7 +18,10 @@ class Bayes_Classifier:
       self.negative = {}
       self.positiveNum = 0
       self.negativeNum = 0
-      
+      self.uselessword=['a','an','is','am','are','the','here','there','I','you','he','she','him','his','hers','her','it','its','this','that','which']
+      self.checkset=set()
+      for i in uselessword:
+         self.checkset.add(i)
       if os.path.isfile('store.pkl'):
          trainData = self.load('store.pkl')
          self.positive = trainData[0]
@@ -69,6 +72,8 @@ class Bayes_Classifier:
                break
             porter = nltk.PorterStemmer()
             word = str(porter.stem(word))
+            if word in self.checkset :
+               continue
             # cancel the useless part before the turn
             '''
             if word == 'but' or word == 'however':
@@ -134,7 +139,8 @@ class Bayes_Classifier:
             break
          porter = nltk.PorterStemmer()
          token = str(porter.stem(token))
-
+         if token in self.checkset :
+            continue
          #extract negative part
          if token[-3:] == "not" or token[-3:] == "n't":
                if i + 1 < len(tokenList):
