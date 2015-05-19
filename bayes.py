@@ -231,33 +231,6 @@ class Bayes_Classifier:
       print len(validateDataList)
       for item in validateDataList:
          correct += self.classify(item[0],True,item[1])
-         # tokenList = self.tokenize(item[0])
-         # positive, negative = self.addOneSmoothing()
-         # positiveProb = float(self.positiveNum)/(self.positiveNum+self.negativeNum)
-         # negativeProb = float(self.negativeNum)/(self.positiveNum+self.negativeNum)
-         # positiveSum = math.log(positiveProb,2)
-         # negativeSum = math.log(negativeProb,2)
-         # difference = positiveSum - negativeSum
-         # for token in tokenList:
-         #    token = token.lower()
-         #    if positive.has_key(token):
-         #       positiveSum += math.log(float(positive[token])/self.positiveNum,2)
-         #       negativeSum += math.log(float(negative[token])/self.negativeNum,2)
-         
-         # if positiveSum > negativeSum:
-         #    if item[1] == 5:
-         #       correct += 1
-         #       print "right", correct
-         #    else:
-         #       print "wrong"
-         # else:
-         #    if item[1] == 1:
-         #       correct += 1
-         #       print "right", correct
-         #    else:
-         #       print "wrong"
-
-      #print correct, len(validateDataList)
       return ((float)(correct))/len(validateDataList)
 
    def tenFoldValidation(self):
