@@ -67,7 +67,8 @@ class Bayes_Classifier:
       else:
          return goodList+badList,[]
 
-   def train(self,fileList):   
+   def train(self,fileList):  
+      #print fileList 
       """Trains the Naive Bayes Sentiment Classifier."""
       positiveNum = 0
       negativeNum = 0
@@ -87,6 +88,8 @@ class Bayes_Classifier:
          reviewStr = self.loadFile('movies_reviews/' + filename)
          reviewWords = self.tokenize(reviewStr)
          tempDic = {}
+
+         print reviewWords
          #put words of a document into two dictionarys
          i = 0
          while i < len(reviewWords):
@@ -97,7 +100,9 @@ class Bayes_Classifier:
                break
             porter = nltk.PorterStemmer()
             word = str(porter.stem(word))
-            if word in self.uselesswords :
+            #remove useless words
+            if word in self.uselesswords:
+               i += 1
                continue
             # cancel the useless part before the turn
             '''
@@ -146,7 +151,7 @@ class Bayes_Classifier:
       class to which the target string belongs (i.e., positive, negative or neutral).
       """
       tokenList = self.tokenize(sText)
-      print tokenList
+      #print tokenList
       positive, negative = self.addOneSmoothing()
       #useless in this case
       positiveProb = float(self.positiveNum)/(self.positiveNum+self.negativeNum)
@@ -160,22 +165,22 @@ class Bayes_Classifier:
       while i < len(tokenList):
          #turn letters to lowercase
          token = tokenList[i].lower()
-         print token
+         
          #extract stem of words
          if len(token) == 1 and ord(token) >= 128:
             break
          porter = nltk.PorterStemmer()
          token = str(porter.stem(token))
          if token in self.uselesswords :
+            i += 1
             continue
          #extract negative part
          if token == "not" or token[-3:] == "n't":
                if i + 1 < len(tokenList):
                   token = "n-" + tokenList[i+1]
                   i += 1
-                  print token
          i += 1 
-         #print token
+
          if positive.has_key(token):
             positiveSum += math.log(float(positive[token])/self.positiveNum,2)
             negativeSum += math.log(float(negative[token])/self.negativeNum,2)
