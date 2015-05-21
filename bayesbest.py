@@ -18,9 +18,9 @@ class Bayes_Classifier:
       self.negative = {}
       self.positiveNum = 0
       self.negativeNum = 0
-      self.uselesswords = set({'i', 'you', 'he',  'she', 'it', 'we', 'they' 'my', 'your',  'its', 'our',  'their', 'mine', 'yours', 'his', 'hers', 'ours', 'theirs', 'me', 'him', 'her', 'us', 'them', 'this', 'that', 'these', 'those',  'a', 'the', 'which','whose','whom', ',', ';','.'})
-      if os.path.isfile('store.pkl'):
-         trainData = self.load('store.pkl')
+      self.uselesswords = set({'i', 'you', 'he',  'she', 'it', 'we', 'they' 'my', 'your',  'its', 'our',  'their', 'mine', 'yours', 'his', 'hers', 'ours', 'theirs', 'me', 'him', 'her', 'us', 'them', 'this', 'that', 'these', 'those',  'a', 'the', 'which','whose','whom', ',', '.'})
+      if os.path.isfile('storeBest.pkl'):
+         trainData = self.load('storeBest.pkl')
          self.positive = trainData[0]
          self.negative = trainData[1]
          self.positiveNum = trainData[2]
@@ -51,6 +51,8 @@ class Bayes_Classifier:
       if i < 10:
          validateList = goodList[int(len(goodList)*i/10.0):int(len(goodList)*(i+1)/10.0)]+badList[int(len(badList)*i/10.0):int(len(badList)*(i+1)/10.0)]
          trainList = goodList[0:int(len(goodList)*i/10.0)]+goodList[int(len(goodList)*(i+1)/10.0):len(goodList)]+badList[0:int(len(badList)*i/10.0)]+badList[int(len(badList)*(i+1)/10.0):len(badList)]
+         print len(validateList)
+         print len(trainList)
          return trainList,validateList
       else:
          return goodList+badList,[]
@@ -124,7 +126,7 @@ class Bayes_Classifier:
       trainData.append(positiveNum)
       trainData.append(negativeNum)
       if not isTenFold:     
-         self.save(trainData,'store.pkl')
+         self.save(trainData,'storeBest.pkl')
       print ""
 
    def classify(self, sText, isList = False, rating=1):
