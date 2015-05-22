@@ -93,11 +93,11 @@ class Bayes_Classifier:
       self.positiveNum = positiveNum
       self.negativeNum = negativeNum
 
-      trainData.append(self.positive)
-      trainData.append(self.negative)
-      trainData.append(positiveNum)
-      trainData.append(negativeNum)     
-      if not isTenFold:     
+      if not isTenFold:  
+         trainData.append(self.positive)
+         trainData.append(self.negative)
+         trainData.append(positiveNum)
+         trainData.append(negativeNum)     
          self.save(trainData,'store.pkl')
       print ""
 

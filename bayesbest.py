@@ -51,8 +51,6 @@ class Bayes_Classifier:
       if i < 10:
          validateList = goodList[int(len(goodList)*i/10.0):int(len(goodList)*(i+1)/10.0)]+badList[int(len(badList)*i/10.0):int(len(badList)*(i+1)/10.0)]
          trainList = goodList[0:int(len(goodList)*i/10.0)]+goodList[int(len(goodList)*(i+1)/10.0):len(goodList)]+badList[0:int(len(badList)*i/10.0)]+badList[int(len(badList)*(i+1)/10.0):len(badList)]
-         print len(validateList)
-         print len(trainList)
          return trainList,validateList
       else:
          return goodList+badList,[]
@@ -121,11 +119,11 @@ class Bayes_Classifier:
       self.positiveNum = positiveNum
       self.negativeNum = negativeNum
 
-      trainData.append(self.positive)
-      trainData.append(self.negative)
-      trainData.append(positiveNum)
-      trainData.append(negativeNum)
-      if not isTenFold:     
+      if not isTenFold:
+         trainData.append(self.positive)
+         trainData.append(self.negative)
+         trainData.append(positiveNum)
+         trainData.append(negativeNum)
          self.save(trainData,'storeBest.pkl')
       print ""
 
