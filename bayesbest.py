@@ -73,6 +73,10 @@ class Bayes_Classifier:
       negativeNum = 0
       self.positive = {}
       self.negative = {}
+      self.tp = 0
+      self.fp = 0
+      self.tn = 0
+      self.fn = 0
       trainData = []
       count = 0
       #put words of all documents into two dictionarys
@@ -102,21 +106,11 @@ class Bayes_Classifier:
                break
 
             word = self.singleWordProcess(word)
-            '''
-            # cancel the useless part before the turn
-<<<<<<< HEAD
-            if word == "but" or word == "howev":
-               tempDic = {}
-               i += 1
-               continue
-            '''
-=======
             # if word == "but" or word == "howev":
             #    tempDic = {}
             #    i += 1
             #    continue
 
->>>>>>> origin/master
             #remove useless words
             # if word in self.uselesswords:
             #    i += 1
@@ -183,22 +177,11 @@ class Bayes_Classifier:
             break
 
          token = self.singleWordProcess(token)
-<<<<<<< HEAD
-         '''
-         if token == "but" or token == "howev":
-            positiveSum = 0
-            negativeSum = 0
-            i += 1
-            continue
-         '''
-=======
-
          # if token == "but" or token == "howev":
          #    positiveSum = 0
          #    negativeSum = 0
          #    i += 1
          #    continue
->>>>>>> origin/master
 
          #extract negative part
          if token == "no" or token == "not" or token[-3:] == "n't":
@@ -228,17 +211,17 @@ class Bayes_Classifier:
          if positiveSum > negativeSum:
             if rating == 5:
                #print "right"
-
+               self.tp += 1
             else:
                #print "wrong"
-               return 
+               self.fp += 1 
          else:
             if rating == 1:
                #print "right"
-               return 
+               self.tn += 1 
             else:
                #print "wrong"
-               return 
+               self.fn += 1 
 
    def loadFile(self, sFilename):
       """Given a file name, return the contents of the file as a string."""
