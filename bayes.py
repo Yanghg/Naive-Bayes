@@ -27,6 +27,7 @@ class Bayes_Classifier:
 
       else:
          self.train(self.generateFileList(10)[0])
+         self.addOneSmoothing()
       # print self.positiveNum
       # print self.negativeNum
 
@@ -106,7 +107,7 @@ class Bayes_Classifier:
       class to which the target string belongs (i.e., positive, negative or neutral).
       """
       tokenList = self.tokenize(sText)
-      positive, negative = self.addOneSmoothing()
+      #positive, negative = self.addOneSmoothing()
       #useless in this case
       positiveProb = float(self.positiveNum)/(self.positiveNum+self.negativeNum)
       negativeProb = float(self.negativeNum)/(self.positiveNum+self.negativeNum)
@@ -116,9 +117,9 @@ class Bayes_Classifier:
       difference = positiveSum - negativeSum
       for token in tokenList:
          token = token.lower()
-         if positive.has_key(token):
-            positiveSum += math.log(float(positive[token])/self.positiveNum,2)
-            negativeSum += math.log(float(negative[token])/self.negativeNum,2)
+         if self.positive.has_key(token):
+            positiveSum += math.log(float(self.positive[token])/self.positiveNum,2)
+            negativeSum += math.log(float(self.negative[token])/self.negativeNum,2)
       
       #print "positive result:" + str(positiveSum)
       #print "negative result:" + str(negativeSum)
@@ -212,7 +213,9 @@ class Bayes_Classifier:
             negative[element] = 0
          positive[element] += 1
          negative[element] += 1
-      return positive, negative
+      #return positive, negative
+      self.positive = positive
+      self.negative = negative
 
    def validate(self,validateList):
       validateDataList = [] 
@@ -250,6 +253,7 @@ class Bayes_Classifier:
          print "No."+str(i+1)+" Fold Validation:"
          trainList,validateList = self.generateFileList(i)
          self.train(trainList,True)
+         self.addOneSmoothing()
          validateDataList = self.validate(validateList)
          result.append(self.classifyList(validateDataList))
          print ""
