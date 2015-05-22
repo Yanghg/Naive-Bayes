@@ -244,6 +244,7 @@ class Bayes_Classifier:
       #print len(validateDataList)
       for item in validateDataList:
          count += 1
+         self.classify(item[0],True,item[1])
          currentPercentage = int((float(count)*100)/totalCount)
          if currentPercentage > 100:
             currentPercentage = 100
