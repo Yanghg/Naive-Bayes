@@ -55,6 +55,13 @@ class Bayes_Classifier:
       else:
          return goodList+badList,[]
 
+   def singleWordProcess(self,word):
+      #turn letters of the word to lowercase
+      word = word.lower()
+      porter = nltk.PorterStemmer()
+      word = str(porter.stem(word))
+      return word
+
    def train(self,fileList,isTenFold = False):  
       #print fileList 
       """Trains the Naive Bayes Sentiment Classifier."""
@@ -83,37 +90,39 @@ class Bayes_Classifier:
          #put words of a document into two dictionarys
          i = 0
          while i < len(reviewWords):
-            #turn letters of the word to lowercase
-            word = reviewWords[i].lower()
+            #extract stem of words
+            word = reviewWords[i]
+
+            if len(word) == 1 and ord(word) >= 128:
+               break
+
+            word = self.singleWordProcess(word)
 
             # cancel the useless part before the turn
-            if word == "but" or word == "however":
+            if word == "but" or word == "howev":
                tempDic = {}
                i += 1
                continue
 
-            #extract stem of words
-            if len(word) == 1 and ord(word) >= 128:
-               break
-            porter = nltk.PorterStemmer()
-            word = str(porter.stem(word))
-
             #remove useless words
-            if word in self.uselesswords:
-               i += 1
-               continue
-
-            
+            # if word in self.uselesswords:
+            #    i += 1
+            #    continue
 
             #extract negative part
             if word == "no" or word == "not" or word[-3:] == "n't":
-               if i + 1 < len(reviewWords):
-                  word = 'n-' + reviewWords[i+1]
-                  i += 1 
-            
+               while i+1<len(reviewWords):
+                  i+=1
+                  nextWord = self.singleWordProcess(reviewWords[i])
+                  if not nextWord in self.uselesswords:
+                     word = 'n-' + nextWord
+                     break
+
             if not tempDic.has_key(word):
                tempDic[word] = True
+
             i += 1 
+
          if rating == 5:
             positiveNum += 1
             for key in tempDic:
@@ -155,21 +164,27 @@ class Bayes_Classifier:
       i = 0
 
       while i < len(tokenList):
-         #turn letters to lowercase
-         token = tokenList[i].lower()
-
+         token = tokenList[i]
          #extract stem of words
          if len(token) == 1 and ord(token) >= 128:
-               break
-         porter = nltk.PorterStemmer()
-         token = str(porter.stem(token))
-         
+            break
+
+         token = self.singleWordProcess(token)
+
+         if token == "but" or token == "howev":
+            positiveSum = 0
+            negativeSum = 0
+            i += 1
+            continue
 
          #extract negative part
          if token == "no" or token == "not" or token[-3:] == "n't":
-               if i + 1 < len(tokenList):
-                  token = "n-" + tokenList[i+1]
-                  i += 1
+            while i+1<len(tokenList):
+               i+=1
+               nextToken = self.singleWordProcess(tokenList[i])
+               if not nextToken in self.uselesswords:
+                  token = 'n-' + nextToken
+                  break
          i += 1 
 
          if self.positive.has_key(token):
