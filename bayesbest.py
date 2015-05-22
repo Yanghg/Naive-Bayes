@@ -85,6 +85,7 @@ class Bayes_Classifier:
          while i < len(reviewWords):
             #turn letters of the word to lowercase
             word = reviewWords[i].lower()
+            
             #extract stem of words
             if len(word) == 1 and ord(word) >= 128:
                break
@@ -98,7 +99,7 @@ class Bayes_Classifier:
             # cancel the useless part before the turn
 
             #extract negative part
-            if word == "not" or word[-3:] == "n't":
+            if word == "no" or word == "not" or word[-3:] == "n't":
                if i + 1 < len(reviewWords):
                   word = 'n-' + reviewWords[i+1]
                   i += 1 
@@ -155,9 +156,10 @@ class Bayes_Classifier:
                break
          porter = nltk.PorterStemmer()
          token = str(porter.stem(token))
+         
 
          #extract negative part
-         if token == "not" or token[-3:] == "n't":
+         if token == "no" or token == "not" or token[-3:] == "n't":
                if i + 1 < len(tokenList):
                   token = "n-" + tokenList[i+1]
                   i += 1
@@ -294,7 +296,7 @@ class Bayes_Classifier:
 
    def tenFoldValidation(self):
       result = []
-      sum = 0
+      sum = 0.0
       for i in range(10):
          print "No."+str(i+1)+" Fold Validation:"
          trainList,validateList = self.generateFileList(i)
