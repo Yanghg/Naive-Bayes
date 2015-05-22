@@ -27,7 +27,6 @@ class Bayes_Classifier:
 
       else:
          self.train(self.generateFileList(10)[0])
-         self.addOneSmoothing()
       # print self.positiveNum
       # print self.negativeNum
 
@@ -93,6 +92,7 @@ class Bayes_Classifier:
                self.negative[key] += 1
       self.positiveNum = positiveNum
       self.negativeNum = negativeNum
+      self.addOneSmoothing()
 
       if not isTenFold:  
          trainData.append(self.positive)
@@ -253,7 +253,6 @@ class Bayes_Classifier:
          print "No."+str(i+1)+" Fold Validation:"
          trainList,validateList = self.generateFileList(i)
          self.train(trainList,True)
-         self.addOneSmoothing()
          validateDataList = self.validate(validateList)
          result.append(self.classifyList(validateDataList))
          print ""
