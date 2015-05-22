@@ -19,6 +19,10 @@ class Bayes_Classifier:
       self.positiveNum = 0
       self.negativeNum = 0
       self.uselesswords = set({'my', 'your',  'its', 'our',  'their',  'his', 'this', 'that', 'these', 'those',  'a', 'the'})
+      self.tp = 0
+      self.fp = 0
+      self.tn = 0
+      self.fn = 0
       if os.path.isfile('storeBest.pkl'):
          trainData = self.load('storeBest.pkl')
          self.positive = trainData[0]
@@ -90,6 +94,7 @@ class Bayes_Classifier:
          #put words of a document into two dictionarys
          i = 0
          while i < len(reviewWords):
+
             #extract stem of words
             word = reviewWords[i]
 
@@ -97,13 +102,13 @@ class Bayes_Classifier:
                break
 
             word = self.singleWordProcess(word)
-
+            '''
             # cancel the useless part before the turn
             if word == "but" or word == "howev":
                tempDic = {}
                i += 1
                continue
-
+            '''
             #remove useless words
             # if word in self.uselesswords:
             #    i += 1
@@ -170,12 +175,13 @@ class Bayes_Classifier:
             break
 
          token = self.singleWordProcess(token)
-
+         '''
          if token == "but" or token == "howev":
             positiveSum = 0
             negativeSum = 0
             i += 1
             continue
+         '''
 
          #extract negative part
          if token == "no" or token == "not" or token[-3:] == "n't":
@@ -205,17 +211,17 @@ class Bayes_Classifier:
          if positiveSum > negativeSum:
             if rating == 5:
                #print "right"
-               return 1
+
             else:
                #print "wrong"
-               return 0
+               return 
          else:
             if rating == 1:
                #print "right"
-               return 1
+               return 
             else:
                #print "wrong"
-               return 0
+               return 
 
    def loadFile(self, sFilename):
       """Given a file name, return the contents of the file as a string."""
