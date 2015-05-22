@@ -18,6 +18,10 @@ class Bayes_Classifier:
       self.negative = {}
       self.positiveNum = 0
       self.negativeNum = 0
+      self.tp = 0
+      self.fp = 0
+      self.tn = 0
+      self.fn = 0
       if os.path.isfile('store.pkl'):
          trainData = self.load('store.pkl')
          self.positive = trainData[0]
@@ -62,6 +66,10 @@ class Bayes_Classifier:
       self.negative = {}
       trainData = []
       count = 0
+      self.tp = 0
+      self.fp = 0
+      self.tn = 0
+      self.fn = 0
       #put words of all documents into two dictionarys
       for filename in fileList:
          count += 1
@@ -137,17 +145,17 @@ class Bayes_Classifier:
          if positiveSum > negativeSum:
             if rating == 5:
                #print "right"
-               return 1
+               self.tp += 1
             else:
                #print "wrong"
-               return 0
+               self.fp += 1 
          else:
             if rating == 1:
                #print "right"
-               return 1
+               self.tn += 1 
             else:
                #print "wrong"
-               return 0
+               self.fn += 1 
 
    def loadFile(self, sFilename):
       """Given a file name, return the contents of the file as a string."""
@@ -243,10 +251,16 @@ class Bayes_Classifier:
             currentPercentage = 100
          sys.stdout.write( "Validatoin Progress: %d%%\r" % currentPercentage)   
          sys.stdout.flush()
-      result = (float(correct))/totalCount
+      accuracy = float(self.tp+self.tn)/(self.tp+self.tn+self.fp+self.fn)
+      posPrecision = float(self.tp)/(self.tp+self.fp)
+      posRecall = float(self.tp)/(self.tp+self.fn)
+      negPrecision = float(self.tn)/(self.tn+self.fn)
+      negRecall = float(self.tn)/(self.tn+self.fp)
+      posF = 2 * posPrecision * posRecall/(posPrecision+posRecall)
+      negF = 2 * negPrecision * negRecall/(negPrecision+negRecall)
       print ""
-      print "Validation Result: " + str(result)
-      return result
+      print "Validation Result: " + str(accuracy) + str(posPrecision) + str(posRecall) + str(negPrecision) + str(negRecall)
+      return accuracy, posPrecision, posRecall, negPrecision, negRecall, posF, negF
 
    def tenFoldValidation(self):
       result = []
@@ -258,9 +272,16 @@ class Bayes_Classifier:
          validateDataList = self.validate(validateList)
          result.append(self.classifyList(validateDataList))
          print ""
+
       for i in result:
-         sum+=i
-      print "Average Validation Rate for Naive Bayes: "+str(float(sum)/10)
+         averAccuracy += i[0]
+         averPosPresicion += i[1]
+         averPosRecall += i[2]
+         averNegPrecision += i[3]
+         averNegRecall += i[4]
+         averPosF += i[5]
+         averNegF += i[6]
+      print "Average Validation Rate for Best Bayes: "+str(float(averAccuracy)/10)+str(float(averPosPresicion)/10)+str(float(averPosRecall)/10)+str(float(averNegPrecision)/10)+str(float(averNegRecall)/10)+str(float(averPosF)/10)+str(float(averNegF)/10)
       #return result
 
 
