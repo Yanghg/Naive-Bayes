@@ -1,4 +1,4 @@
-execfile('bayesbest.py')
+execfile('bayes.py')
 bc = Bayes_Classifier()
 result = bc.tenFoldValidation()
 print result

@@ -239,13 +239,11 @@ class Bayes_Classifier:
       """Given a target string sText, this function returns the most likely document
       class to which the target string belongs (i.e., positive, negative or neutral).
       """
-      correct = 0
       count = 0
       totalCount = len(validateDataList)
       #print len(validateDataList)
       for item in validateDataList:
          count += 1
-         correct += self.classify(item[0],True,item[1])
          currentPercentage = int((float(count)*100)/totalCount)
          if currentPercentage > 100:
             currentPercentage = 100
