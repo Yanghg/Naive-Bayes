@@ -316,7 +316,7 @@ class Bayes_Classifier:
             currentPercentage = 100
          sys.stdout.write( "Validatoin Progress: %d%%\r" % currentPercentage)   
          sys.stdout.flush()
-      accuracy = float(self.tp+self.fn)/(self.tp+self.tn+self.fp+self.fn)
+      accuracy = float(self.tp+self.tn)/(self.tp+self.tn+self.fp+self.fn)
       posPrecision = float(self.tp)/(self.tp+self.fp)
       posRecall = float(self.tp)/(self.tp+self.fn)
       negPrecision = float(self.tn)/(self.tn+self.fn)
@@ -324,7 +324,7 @@ class Bayes_Classifier:
       posF = 2 * posPrecision * posRecall/(posPrecision+posRecall)
       negF = 2 * negPrecision * negRecall/(negPrecision+negRecall)
       print ""
-      print "Validation Result: " + str(accuracy) + str(posPrecision) + str(posRecall) + str(negPrecision) + str(negRecall) +
+      print "Validation Result: " + str(accuracy) + str(posPrecision) + str(posRecall) + str(negPrecision) + str(negRecall)
       return accuracy, posPrecision, posRecall, negPrecision, negRecall, posF, negF
 
    def tenFoldValidation(self):
