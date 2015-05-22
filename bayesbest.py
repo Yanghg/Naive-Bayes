@@ -358,13 +358,13 @@ class Bayes_Classifier:
          averNegRecall += i[4]
          averPosF += i[5]
          averNegF += i[6]
-      print "Validation Accuracy: " + str(float(averAccuracy)/10)
-      print "Validation Positive Precision: " + str(float(averPosPresicion)/10)
-      print "Validation Positive Recall: "+ str(float(averPosRecall)/10)
-      print "Validation Negative Precision: "+ str(float(averNegPrecision)/10)
-      print "Validation Negative Recall: "+ str(float(averNegRecall)/10)
-      print "Validation Positive F-Meature: " + str(float(averPosF)/10)
-      print "Validation Negative F-Meature: " + str(float(averNegF)/10)
+      print "Average Validation Accuracy: " + str(float(averAccuracy)/10)
+      print "Average Validation Positive Precision: " + str(float(averPosPresicion)/10)
+      print "Average Validation Positive Recall: "+ str(float(averPosRecall)/10)
+      print "Average Validation Negative Precision: "+ str(float(averNegPrecision)/10)
+      print "Average Validation Negative Recall: "+ str(float(averNegRecall)/10)
+      print "Average Validation Positive F-Meature: " + str(float(averPosF)/10)
+      print "Average Validation Negative F-Meature: " + str(float(averNegF)/10)
       #return result
 
 
