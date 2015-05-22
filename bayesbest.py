@@ -99,10 +99,10 @@ class Bayes_Classifier:
             word = self.singleWordProcess(word)
 
             # cancel the useless part before the turn
-            if word == "but" or word == "howev":
-               tempDic = {}
-               i += 1
-               continue
+            # if word == "but" or word == "howev":
+            #    tempDic = {}
+            #    i += 1
+            #    continue
 
             #remove useless words
             # if word in self.uselesswords:
@@ -171,11 +171,11 @@ class Bayes_Classifier:
 
          token = self.singleWordProcess(token)
 
-         if token == "but" or token == "howev":
-            positiveSum = 0
-            negativeSum = 0
-            i += 1
-            continue
+         # if token == "but" or token == "howev":
+         #    positiveSum = 0
+         #    negativeSum = 0
+         #    i += 1
+         #    continue
 
          #extract negative part
          if token == "no" or token == "not" or token[-3:] == "n't":
