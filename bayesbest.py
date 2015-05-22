@@ -18,7 +18,7 @@ class Bayes_Classifier:
       self.negative = {}
       self.positiveNum = 0
       self.negativeNum = 0
-      self.uselesswords = set({'i', 'you', 'he',  'she', 'it', 'we', 'they' 'my', 'your',  'its', 'our',  'their', 'mine', 'yours', 'his', 'hers', 'ours', 'theirs', 'me', 'him', 'her', 'us', 'them', 'this', 'that', 'these', 'those',  'a', 'the', 'which','whose','whom', ',', '.'})
+      self.uselesswords = set({'my', 'your',  'its', 'our',  'their',  'his', 'this', 'that', 'these', 'those',  'a', 'the'})
       if os.path.isfile('storeBest.pkl'):
          trainData = self.load('storeBest.pkl')
          self.positive = trainData[0]

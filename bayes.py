@@ -75,7 +75,7 @@ class Bayes_Classifier:
          reviewWords = self.tokenize(reviewStr)
          tempDic = {}
          for word in reviewWords:
-            word = word.lower()
+            #word = word.lower()
             if not tempDic.has_key(word):
                tempDic[word] = True
          if rating == 5:
