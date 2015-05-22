@@ -324,12 +324,24 @@ class Bayes_Classifier:
       posF = 2 * posPrecision * posRecall/(posPrecision+posRecall)
       negF = 2 * negPrecision * negRecall/(negPrecision+negRecall)
       print ""
-      print "Validation Result: " + str(accuracy) + str(posPrecision) + str(posRecall) + str(negPrecision) + str(negRecall)
+      print "Validation Accuracy: " + str(accuracy)
+      print "Validation Positive Precision: " + str(posPrecision) 
+      print "Validation Positive Recall: "+ str(posRecall) 
+      print "Validation Negative Precision: "+ str(negPrecision) 
+      print "Validation Negative Recall: "+ str(negRecall)
+      print "Validation Positive F-Meature: " + str(posF)
+      print "Validation Negative F-Meature: " + str(negF)
       return accuracy, posPrecision, posRecall, negPrecision, negRecall, posF, negF
 
    def tenFoldValidation(self):
       result = []
-      sum = 0.0
+      averAccuracy = 0.0
+      averPosPresicion = 0.0
+      averPosRecall = 0.0
+      averNegPrecision = 0.0
+      averNegRecall = 0.0
+      averPosF = 0.0
+      averNegF = 0.0
       for i in range(10):
          print "No."+str(i+1)+" Fold Validation:"
          trainList,validateList = self.generateFileList(i)
@@ -346,7 +358,13 @@ class Bayes_Classifier:
          averNegRecall += i[4]
          averPosF += i[5]
          averNegF += i[6]
-      print "Average Validation Rate for Best Bayes: "+str(float(averAccuracy)/10)+str(float(averPosPresicion)/10)+str(float(averPosRecall)/10)+str(float(averNegPrecision)/10)+str(float(averNegRecall)/10)+str(float(averPosF)/10)+str(float(averNegF)/10)
+      print "Validation Accuracy: " + str(float(averAccuracy)/10)
+      print "Validation Positive Precision: " + str(float(averPosPresicion)/10)
+      print "Validation Positive Recall: "+ str(float(averPosRecall)/10)
+      print "Validation Negative Precision: "+ str(float(averNegPrecision)/10)
+      print "Validation Negative Recall: "+ str(float(averNegRecall)/10)
+      print "Validation Positive F-Meature: " + str(float(averPosF)/10)
+      print "Validation Negative F-Meature: " + str(float(averNegF)/10)
       #return result
 
 
