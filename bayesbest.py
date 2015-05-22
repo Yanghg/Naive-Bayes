@@ -322,22 +322,27 @@ class Bayes_Classifier:
       """Given a target string sText, this function returns the most likely document
       class to which the target string belongs (i.e., positive, negative or neutral).
       """
-      correct = 0
       count = 0
       totalCount = len(validateDataList)
       #print len(validateDataList)
       for item in validateDataList:
          count += 1
-         correct += self.classify(item[0],True,item[1])
+         self.classify(item[0],True,item[1])
          currentPercentage = int((float(count)*100)/totalCount)
          if currentPercentage > 100:
             currentPercentage = 100
          sys.stdout.write( "Validatoin Progress: %d%%\r" % currentPercentage)   
          sys.stdout.flush()
-      result = (float(correct))/totalCount
+      accuracy = float(self.tp+self.fn)/(self.tp+self.tn+self.fp+self.fn)
+      posPrecision = float(self.tp)/(self.tp+self.fp)
+      posRecall = float(self.tp)/(self.tp+self.fn)
+      negPrecision = float(self.tn)/(self.tn+self.fn)
+      negRecall = float(self.tn)/(self.tn+self.fp)
+      posF = 2 * posPrecision * posRecall/(posPrecision+posRecall)
+      negF = 2 * negPrecision * negRecall/(negPrecision+negRecall)
       print ""
-      print "Validation Result: " + str(result)
-      return result
+      print "Validation Result: " + str(accuracy) + str(posPrecision) + str(posRecall) + str(negPrecision) + str(negRecall) +
+      return accuracy, posPrecision, posRecall, negPrecision, negRecall, posF, negF
 
    def tenFoldValidation(self):
       result = []
@@ -347,11 +352,18 @@ class Bayes_Classifier:
          trainList,validateList = self.generateFileList(i)
          self.train(trainList,True)
          validateDataList = self.validate(validateList)
-         result.append(self.classifyList(validateDataList))
+         accuracy, posPrecision, posRecall, negPrecision, negRecall, posF, negF = self.classifyList(validateDataList)
+         result.append((accuracy, posPrecision, posRecall, negPrecision, negRecall, posF, negF))
          print ""
       for i in result:
-         sum+=i
-      print "Average Validation Rate for Best Bayes: "+str(float(sum)/10)
+         averAccuracy += i[0]
+         averPosPresicion += i[1]
+         averPosRecall += i[2]
+         averNegPrecision += i[3]
+         averNegRecall += i[4]
+         averPosF += i[5]
+         averNegF += i[6]
+      print "Average Validation Rate for Best Bayes: "+str(float(averAccuracy)/10)+str(float(averPosPresicion)/10)+str(float(averPosRecall)/10)+str(float(averNegPrecision)/10)+str(float(averNegRecall)/10)+str(float(averPosF)/10)+str(float(averNegF)/10)
       #return result
 
 
