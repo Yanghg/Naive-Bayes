@@ -58,6 +58,8 @@ class Bayes_Classifier:
       """Trains the Naive Bayes Sentiment Classifier."""
       positiveNum = 0
       negativeNum = 0
+      self.positive = {}
+      self.negative = {}
       trainData = []
       count = 0
       #put words of all documents into two dictionarys
