@@ -85,7 +85,13 @@ class Bayes_Classifier:
          while i < len(reviewWords):
             #turn letters of the word to lowercase
             word = reviewWords[i].lower()
-            
+
+            # cancel the useless part before the turn
+            if word == "but" or word == "however":
+               tempDic = {}
+               i += 1
+               continue
+
             #extract stem of words
             if len(word) == 1 and ord(word) >= 128:
                break
@@ -96,7 +102,8 @@ class Bayes_Classifier:
             if word in self.uselesswords:
                i += 1
                continue
-            # cancel the useless part before the turn
+
+            
 
             #extract negative part
             if word == "no" or word == "not" or word[-3:] == "n't":
@@ -150,7 +157,7 @@ class Bayes_Classifier:
       while i < len(tokenList):
          #turn letters to lowercase
          token = tokenList[i].lower()
-         
+
          #extract stem of words
          if len(token) == 1 and ord(token) >= 128:
                break
