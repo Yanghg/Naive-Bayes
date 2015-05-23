@@ -106,15 +106,14 @@ class Bayes_Classifier:
                break
 
             word = self.singleWordProcess(word)
-            # if word == "but" or word == "howev":
-            #    tempDic = {}
-            #    i += 1
-            #    continue
-
+            '''
+            if word == "but" or word == "howev":
+                  tempDic = {}
+                  i += 1
+                  continue
+            '''
             #remove useless words
-            # if word in self.uselesswords:
-            #    i += 1
-            #    continue
+            
 
             #extract negative part
             if word == "no" or word == "not" or word[-3:] == "n't":
@@ -194,8 +193,8 @@ class Bayes_Classifier:
          i += 1 
 
          if self.positive.has_key(token):
-            positiveSum += math.log(float(self.positive[token])/self.positiveNum,2)
-            negativeSum += math.log(float(self.negative[token])/self.negativeNum,2)
+            positiveSum += math.log(float(self.positive[token])/(self.positiveNum + (float(self.positiveNum/self.negativeNum))**3),2)
+            negativeSum += math.log(float(self.negative[token])/(self.negativeNum + (float(self.negativeNum/self.positiveNum))**3),2)
       
       #print "positive result:" + str(positiveSum)
       #print "negative result:" + str(negativeSum)
